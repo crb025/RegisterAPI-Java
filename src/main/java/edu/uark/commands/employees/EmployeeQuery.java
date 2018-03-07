@@ -2,40 +2,31 @@ package edu.uark.commands.employees;
 
 import java.util.UUID;
 
-
 import edu.uark.commands.ResultCommandInterface;
+import edu.uark.commands.employees.EmployeeQuery;
 import edu.uark.controllers.exceptions.NotFoundException;
-import edu.uark.controllers.exceptions.UnprocessableEntityException;
 import edu.uark.models.api.Employee;
 import edu.uark.models.entities.EmployeeEntity;
 import edu.uark.models.repositories.EmployeeRepository;
 import edu.uark.models.repositories.interfaces.EmployeeRepositoryInterface;
 
-
-
-/* This code should not be used unless LookupCode is added to the Employee table in the database*/
-
-public class EmployeeByLookupCodeQuery implements ResultCommandInterface<Employee> {
+public class EmployeeQuery implements ResultCommandInterface<Employee>{
 	@Override
 	public Employee execute() {
-		if (this.employeeId == null) {
-			throw new UnprocessableEntityException("employeeId");
-		}
-		
-		EmployeeEntity employeeEntity = this.employeeRepository.byEmployeeId(this.employeeId);
+		EmployeeEntity employeeEntity = this.employeeRepository.get(this.employeeId);
 		if (employeeEntity != null) {
 			return new Employee(employeeEntity);
 		} else {
 			throw new NotFoundException("Employee");
 		}
 	}
-	
+
 	//Properties
 	private UUID employeeId;
-	public UUID getLookupCode() {
+	public UUID getEmployeeId() {
 		return this.employeeId;
 	}
-	public EmployeeByLookupCodeQuery setEmployeeId(UUID employeeId) {
+	public EmployeeQuery setEmployeeId(UUID employeeId) {
 		this.employeeId = employeeId;
 		return this;
 	}
@@ -44,13 +35,12 @@ public class EmployeeByLookupCodeQuery implements ResultCommandInterface<Employe
 	public EmployeeRepositoryInterface getEmployeeRepository() {
 		return this.employeeRepository;
 	}
-	public EmployeeByLookupCodeQuery setEmployeeRepository(EmployeeRepositoryInterface employeeRepository) {
+	public EmployeeQuery setEmployeeRepository(EmployeeRepositoryInterface employeeRepository) {
 		this.employeeRepository = employeeRepository;
 		return this;
 	}
 	
-	public EmployeeByLookupCodeQuery() {
+	public EmployeeQuery() {
 		this.employeeRepository = new EmployeeRepository();
 	}
-	
 }

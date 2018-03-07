@@ -12,19 +12,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.uark.commands.employees.EmployeeByLookupCodeQuery;
 import edu.uark.commands.employees.EmployeeCreateCommand;
+import edu.uark.commands.employees.EmployeeQuery;
 import edu.uark.commands.employees.EmployeeUpdateCommand;
-import edu.uark.commands.products.ProductUpdateCommand;
+import edu.uark.commands.employees.EmployeesQuery;
 import edu.uark.models.api.Employee;
-import edu.uark.models.api.Product;
 
 @RestController
 @RequestMapping(value = "/api/employee")
-
 public class EmployeeRestController {
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public List<Employee> getEmployees() {
+		return (new EmployeesQuery()).execute();
+	}
 	
 	@RequestMapping(value = "/{employeeId}", method = RequestMethod.GET)
 	public Employee getEmployee(@PathVariable UUID employeeId) {
-		return (new EmployeeByLookupCodeQuery()).
+		return (new EmployeeQuery()).
 				setEmployeeId(employeeId).
 				execute();
 	}
